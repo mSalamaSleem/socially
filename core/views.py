@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView, UpdateView
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from .forms import *
@@ -54,3 +54,12 @@ def logout_page(request):
 @login_required(login_url='/login')
 def profile(request):
     return render(request, 'profile.html')
+
+
+class ProfileSettingUpdateView(UpdateView):
+    model = User
+    form_class = ProfileSettingForm
+    template_name = 'account_settings.html'
+
+    def get_object(self, queryset=None):
+        return User.objects.get(pk=self.request.user.pk)
