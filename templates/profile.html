@@ -6,6 +6,9 @@
 </head>
 <body>
     <h1>welcome, {{ request.user.username }}</h1>
+    <h3>{{ request.user.first_name }} {{ request.user.last_name }}</h3>
+    <h3>{{ request.user.bio }}</h3>
+    <img src="{{ request.user.profile_pic.url }}">
     <a href="{% url 'logout' %}">logout</a>
 </body>
 </html>

@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.views.generic.edit import CreateView, UpdateView
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
+from django.utils.decorators import method_decorator
 from .forms import *
 from .models import User
 
@@ -56,10 +57,12 @@ def profile(request):
     return render(request, 'profile.html')
 
 
+@method_decorator(login_required(login_url='/login'), name='dispatch')
 class ProfileSettingUpdateView(UpdateView):
     model = User
     form_class = ProfileSettingForm
     template_name = 'account_settings.html'
+    success_url = '/'
 
     def get_object(self, queryset=None):
-        return User.objects.get(pk=self.request.user.pk)
+        return self.request.user.pk
