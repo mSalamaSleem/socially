@@ -124,4 +124,11 @@ USE_TZ = True
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'  # this line for forms crispy
 
+# change user model to mine
+AUTH_USER_MODEL = 'core.User'
+# static files and media files
+STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_URL = '/static/'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'static/media'
