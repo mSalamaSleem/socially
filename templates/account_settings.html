@@ -1,14 +1,20 @@
-<!DOCTYPE html>
+{%  extends 'base.html' %}
 {% load crispy_forms_tags %}
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Profile</title>
-</head>
-<body>
-    <form method="POST" enctype="multipart/form-data"> {% csrf_token %}
-        {{ form | crispy}}
-        <input type="submit" value="save">
+
+
+{% block title %}
+    Settings
+{% endblock title %}
+
+
+{% block navbar %}
+    {%  include 'navbar.html' %}
+{% endblock navbar %}
+
+
+{% block content %}
+    <form method="POST" action="" enctype="multipart/form-data"> {% csrf_token %}
+        {{ form|crispy }}
+        <input class="btn btn-primary" type="submit" name="Update Information">
     </form>
-</body>
-</html>
+{% endblock content %}

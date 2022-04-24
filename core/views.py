@@ -65,4 +65,4 @@ class ProfileSettingUpdateView(UpdateView):
     success_url = '/'
 
     def get_object(self, queryset=None):
-        return self.request.user.pk
+        return User.objects.get(pk=self.request.user.pk)
