@@ -112,6 +112,14 @@ class FriendProfileView(ListView):
         return Post.objects.filter(user=friend).order_by('-created_at')
 
 
+class SearchResult(ListView):
+    model = User
+    template_name = 'home/search_results.html'
+    context_object_name = 'user_results'
+    paginate_by = 5
+
+    def get_queryset(self):
+        return User.objects.filter(username__contains=self.request.GET['search-term'])
 # def search(request):
 #     users = User.objects.filter(username__contains=request.GET.get('search-term'))
-#     return render(request, 'home/users.html', context={'users': users})
+#     return render(request, 'home/search_results.html', context={'users': users})

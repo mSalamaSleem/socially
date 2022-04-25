@@ -12,5 +12,5 @@ urlpatterns = [
     path('account_settings/', ProfileSettingUpdateView.as_view(), name='account_settings'),
     path('posts/new/', PostCreationView.as_view(), name='new_post'),
 
-    # path('search/', search, name='search'),
+    path('search/', SearchResult.as_view(), name='search'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
