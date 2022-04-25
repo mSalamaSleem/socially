@@ -33,7 +33,7 @@ class SignUpView(CreateView):
 
 def login_page(request):
     if request.user.is_authenticated:
-        return redirect('profile')
+        return redirect('home')
     if request.method == 'GET':
         return render(request, 'auth/login.html')
     elif request.method == 'POST':
@@ -43,7 +43,7 @@ def login_page(request):
         user = authenticate(username=username, password=password)
         if user:
             login(request, user)
-            return redirect('profile')
+            return redirect('home')
         else:
             print('username or password wrong')
             return redirect('login')
@@ -52,6 +52,20 @@ def login_page(request):
 def logout_page(request):
     logout(request)
     return redirect('login')
+
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class HomeListView(ListView):
+    model = Post
+    template_name = 'home/home.html'
+    context_object_name = 'posts'
+    paginate_by = 5
+
+    def get_queryset(self):  # responsible for items retrieve
+        friends = []
+        for friend in Friend.objects.filter(follower=self.request.user):
+            friends.append(friend.followed)
+        return Post.objects.filter(user__in=friends).order_by('-created_at')
 
 
 @method_decorator(login_required(login_url='login'), name='dispatch')

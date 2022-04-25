@@ -4,7 +4,7 @@
     </button>
 
     <div class="collapse navbar-collapse" id="navbarToggler" >
-        <h3> <a class="navbar-brand" href="#">SocialNetwork</a> </h3>
+        <h3> <a class="navbar-brand" href="{% url 'home' %}">Socially</a> </h3>
         <form class="form-inline my-2 my-lg-0" method="GET" action="{% url 'search' %}">
             <input class="form-control mr-sm-2" type="search" name="search-term" placeholder="Search for friends" aria-label="Search">
         </form>
@@ -14,7 +14,7 @@
             
 
             <li class="nav-item">
-                <a class="nav-link" href=""> <i class="fa fa-home fa-lg"></i> Home</a>
+                <a class="nav-link" href="{% url 'home' %}"> <i class="fa fa-home fa-lg"></i> Home</a>
             </li>
 
 
