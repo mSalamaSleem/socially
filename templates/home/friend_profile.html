@@ -25,9 +25,11 @@
             <a href="#"><h4 >@{{friend.username}}</h4></a>
             <h6>{{friend.get_num_posts}} Posts</h6>
             <p>{{friend.bio}}</p>
-
-            <a><button class="btn btn-primary">follow</button></a>
-            <a><button class="btn btn-danger">unfollow</button></a>
+            {% if is_following %}
+                <a href="{% url 'unfollow' friend.pk %}"><button class="btn btn-danger">unfollow</button></a>
+            {% else %}
+                <a href="{% url 'follow' friend.pk %}"><button class="btn btn-primary">follow</button></a>
+            {% endif %}
 
         </div>
     </div>
