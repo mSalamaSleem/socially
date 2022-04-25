@@ -1,13 +1,25 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Add Post</title>
-</head>
-<body>
-    <form method="POST"> {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="create">
-    </form>
-</body>
-</html>
+{%  extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+New Post
+{% endblock title %}
+
+
+{% block navbar %}
+
+{%  include 'home/navbar.html' %}
+
+{% endblock navbar %}
+
+{% block content %}
+<br>
+<form method="POST" action="" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form|crispy }}
+
+    <input class="btn btn-primary" type="submit" value="Post">
+</form>
+
+{% endblock content %}
+

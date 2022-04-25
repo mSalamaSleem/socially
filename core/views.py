@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.views.generic.edit import CreateView, UpdateView
+from django.views.generic.list import ListView
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.utils.decorators import method_decorator
@@ -52,9 +53,15 @@ def logout_page(request):
     return redirect('login')
 
 
-@login_required(login_url='/login')
-def profile(request):
-    return render(request, 'home/profile.html')
+@method_decorator(login_required(login_url='/login'), name='dispatch')
+class PostsListView(ListView):
+    model = Post
+    template_name = 'home/profile.html'
+    context_object_name = 'posts'
+    paginate_by = 5
+
+    def get_queryset(self):  # responsible for items retrieve
+        return Post.objects.filter(user=self.request.user).order_by('-created_at')
 
 
 @method_decorator(login_required(login_url='/login'), name='dispatch')
@@ -77,3 +84,34 @@ class PostCreationView(CreateView):
     def form_valid(self, form):
         form.instance.user = self.request.user
         return super(PostCreationView, self).form_valid(form)
+
+
+@method_decorator(login_required(login_url='/login'), name='dispatch')
+class FriendProfileView(ListView):
+    model = Post
+    template_name = 'home/friend_profile.html'
+    context_object_name = 'posts'
+    paginate_by = 5
+
+    def get(self, *args, **kwargs):
+        friend_username = self.kwargs['username']
+        authenticated_username = self.request.user.username
+        if friend_username == authenticated_username:
+            return redirect('/')
+        else:
+            return super(FriendProfileView, self).get(*args, **kwargs)
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        friend = User.objects.get(username=self.kwargs['username'])
+        context['friend'] = friend
+        return context
+
+    def get_queryset(self):  # responsible for items retrieve
+        friend = User.objects.get(username=self.kwargs['username'])
+        return Post.objects.filter(user=friend).order_by('-created_at')
+
+
+# def search(request):
+#     users = User.objects.filter(username__contains=request.GET.get('search-term'))
+#     return render(request, 'home/users.html', context={'users': users})

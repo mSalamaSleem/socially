@@ -23,7 +23,7 @@ My Profile
 
             <h3 >{{request.user.first_name}} {{request.user.last_name}}</h3>
             <a href="#"><h4 >@{{request.user.username}}</h4></a>
-            <!-- <h6>{{request.user.get_num_posts}} Posts</h6> -->
+            <h6>{{request.user.get_num_posts}} Posts</h6>
             <p>{{request.user.bio}}</p>
 
             <a href="{% url 'account_settings' %}"> <h6>Account Settings</h6> </a>
@@ -31,21 +31,21 @@ My Profile
     </div>
 
 
-<!--  <div class="col-md-8" >-->
-<!--        <div class="card card-body"style="border-radius:25px; min-height:100%;">-->
-<!--            <a href="#" style="margin-left: 2%;"> <h1> <i class="fa fa-pencil fa-lg"></i> New Post...</h1> </a>-->
-<!--                {% for post in object_list %}-->
-<!--                <div class="card" style="margin: 2%;">-->
-<!--                    <div class="card-body">-->
-<!--                        <p class="card-text">{{post.caption}}</p>-->
-<!--                        <a href="#" class="card-link">{{post.date_created}}</a>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--                {% endfor %}-->
-<!--            pagination here -->
-<!--        </div>-->
-<!--        <br>-->
-<!--    </div> -->
+ <div class="col-md-8" >
+	<div class="card card-body"style="border-radius:25px; min-height:100%;">
+            <a href="{% url 'new_post' %}" style="margin-left: 2%;"> <h1> <i class="fa fa-pencil fa-lg"></i> New Post...</h1> </a>
+                {% for post in posts %}
+                <div class="card" style="margin: 2%;">
+                    <div class="card-body">
+                        <p class="card-text">{{post.caption}}</p>
+                        <a href="#" class="card-link">{{post.date_created}}</a>
+                    </div>
+                </div>
+                {% endfor %}
+            {% include 'posts/pagination.html' %}
+        </div>
+        <br>
+    </div>
 
 </div>
 
