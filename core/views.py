@@ -93,7 +93,7 @@ class FriendProfileView(ListView):
     context_object_name = 'posts'
     paginate_by = 5
 
-    def get(self, *args, **kwargs):
+    def get(self, *args, **kwargs): # if search for same user redirect to profile
         friend_username = self.kwargs['username']
         authenticated_username = self.request.user.username
         if friend_username == authenticated_username:
@@ -120,6 +120,3 @@ class SearchResult(ListView):
 
     def get_queryset(self):
         return User.objects.filter(username__contains=self.request.GET['search-term'])
-# def search(request):
-#     users = User.objects.filter(username__contains=request.GET.get('search-term'))
-#     return render(request, 'home/search_results.html', context={'users': users})
