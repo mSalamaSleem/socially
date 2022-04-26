@@ -1,4 +1,5 @@
-from django.shortcuts import render, redirect
+from django.http import Http404
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy, reverse
 from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic.list import ListView
@@ -14,6 +15,11 @@ class SignUpView(CreateView):
     form_class = SignUpForm
     template_name = 'auth/signup.html'
 
+    def get(self, *args, **kwargs):
+        if self.request.user.is_authenticated:
+            return redirect('profile')
+        return super(SignUpView, self).get(*args, **kwargs)
+
     # method 1
     def get_success_url(self):
         login(self.request, self.object)  # self.object is the user object
@@ -24,11 +30,6 @@ class SignUpView(CreateView):
     #     user = form.save()
     #     login(self.request, user)
     #     return redirect(reverse('login'))
-
-    def get(self, *args, **kwargs):
-        if self.request.user.is_authenticated:
-            return redirect('profile')
-        return super(SignUpView, self).get(*args, **kwargs)
 
 
 def login_page(request):
@@ -126,7 +127,10 @@ class FriendProfileView(ListView):
         return context
 
     def get_queryset(self):  # responsible for items retrieve
-        friend = User.objects.get(username=self.kwargs['username'])
+        try:
+            friend = User.objects.get(username=self.kwargs['username'])
+        except User.DoesNotExist:
+            raise Http404('OOPS no users found')
         return Post.objects.filter(user=friend).order_by('-created_at')
 
 
@@ -138,7 +142,7 @@ class SearchResult(ListView):
     paginate_by = 5
 
     def get_queryset(self):
-        return User.objects.filter(username__contains=self.request.GET['search-term'])
+        return User.objects.filter(username__contains=self.request.GET['search_term']).order_by('username')
 
 
 @login_required(login_url='login')

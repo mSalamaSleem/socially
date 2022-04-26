@@ -12,7 +12,8 @@
 
 
 {% block content %}
-<div class="row" style="margin-top:2%;">
+    {% if user_results %}
+        <div class="row" style="margin-top:2%;">
 
     <div class="col" >
 
@@ -36,9 +37,13 @@
             {% endfor %}
 
         </div>
-        {%  include 'posts/pagination.html' %}
+        {% include 'posts/pagination.html' %}
     </div>
 
 </div>
-
+    {% else %}
+        <div>
+            <p>sorry {{ request.GET.search_term }} not found</p>
+        </div>
+    {% endif %}
 {% endblock content %}
