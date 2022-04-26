@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'crispy_forms',
+    'users_authentication',
     'core',
 ]
 
@@ -125,7 +126,7 @@ USE_TZ = True
 CRISPY_TEMPLATE_PACK = 'bootstrap4'  # this line for forms crispy
 
 # change user model to mine
-AUTH_USER_MODEL = 'core.User'
+AUTH_USER_MODEL = 'users_authentication.User'
 # static files and media files
 STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_URL = '/static/'
