@@ -10,6 +10,20 @@ from .forms import *
 from .models import *
 
 
+def handler404(request, exception):
+    context = {}
+    response = render(request, "404.html", context=context)
+    response.status_code = 404
+    return response
+
+
+# def handler500(request):
+#     context = {}
+#     response = render(request, "500.html", context=context)
+#     response.status_code = 500
+#     return response
+
+
 class SignUpView(CreateView):
     model = User
     form_class = SignUpForm

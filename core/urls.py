@@ -3,6 +3,7 @@ from django.conf.urls.static import static
 from django.urls import path
 from .views import *
 
+
 urlpatterns = [
     path('', HomeListView.as_view(), name='home'),
     path('profile', PostsListView.as_view(), name='profile'),
@@ -17,4 +18,5 @@ urlpatterns = [
 
     path('follow/<int:pk>', follow_user, name='follow'),
     path('unfollow/<int:pk>', unfollow_user, name='unfollow'),
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
