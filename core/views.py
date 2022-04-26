@@ -1,11 +1,12 @@
 from django.http import Http404
 from django.shortcuts import render, redirect
-from django.urls import reverse_lazy
-from django.views.generic.edit import CreateView
+from django.urls import reverse_lazy, reverse
+from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic.list import ListView
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from users_authentication.forms import *
+from .forms import PostUpdateForm
 from .models import *
 
 
@@ -32,6 +33,13 @@ class PostsListView(ListView):
 
     def get_queryset(self):  # responsible for items retrieve
         return Post.objects.filter(user=self.request.user).order_by('-created_at')
+
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class PostsUpdateView(UpdateView):
+    model = Post
+    template_name = 'posts/update_post.html'
+    form_class = PostUpdateForm
 
 
 @method_decorator(login_required(login_url='login'), name='dispatch')

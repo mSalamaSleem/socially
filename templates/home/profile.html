@@ -39,6 +39,7 @@ My Profile
                     <div class="card-body">
                         <p class="card-text">{{post.caption}}</p>
                         <a href="#" class="card-link">{{post.created_at}}</a>
+                        <a href="{% url 'update_post' post.pk %}"><button class="btn btn-primary">update</button></a>
                     </div>
                 </div>
                 {% endfor %}

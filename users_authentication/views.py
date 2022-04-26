@@ -14,6 +14,7 @@ from django.db.models.query_utils import Q
 from django.utils.http import urlsafe_base64_encode
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.encoding import force_bytes
+from django.contrib import messages
 
 
 class SignUpView(CreateView):
@@ -65,7 +66,7 @@ def logout_page(request):
 class ProfileSettingUpdateView(UpdateView):
     model = User
     form_class = ProfileSettingForm
-    template_name = 'home/../templates/auth/account_settings.html'
+    template_name = 'auth/account_settings.html'
     success_url = reverse_lazy('profile')
 
     def get_object(self, queryset=None):
