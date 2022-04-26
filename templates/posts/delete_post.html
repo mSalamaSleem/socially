@@ -1,14 +1,15 @@
 <!DOCTYPE html>
-{% load crispy_forms_tags %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Update Post</title>
+    <title>Delete</title>
 </head>
 <body>
+
     <form method="POST"> {% csrf_token %}
-        {{ form | crispy }}
-        <input type="submit" value="update">
+        <p>Are you sure you want to delete "{{ object }}"?</p>
+        <input type="submit" value="Confirm">
     </form>
+
 </body>
 </html>

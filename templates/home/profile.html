@@ -40,6 +40,7 @@ My Profile
                         <p class="card-text">{{post.caption}}</p>
                         <a href="#" class="card-link">{{post.created_at}}</a>
                         <a href="{% url 'update_post' post.pk %}"><button class="btn btn-primary">update</button></a>
+                        <a href="{% url 'delete_post' post.pk %}"><button class="btn btn-primary">delete</button></a>
                     </div>
                 </div>
                 {% endfor %}

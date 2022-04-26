@@ -1,7 +1,7 @@
 from django.http import Http404
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse
-from django.views.generic.edit import CreateView, UpdateView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.list import ListView
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
@@ -40,6 +40,14 @@ class PostsUpdateView(UpdateView):
     model = Post
     template_name = 'posts/update_post.html'
     form_class = PostUpdateForm
+    success_url = reverse_lazy('profile')
+
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class PostsDeleteView(DeleteView):
+    model = Post
+    template_name = 'posts/delete_post.html'
+    success_url = reverse_lazy('profile')
 
 
 @method_decorator(login_required(login_url='login'), name='dispatch')
