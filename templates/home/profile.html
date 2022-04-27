@@ -35,14 +35,23 @@ My Profile
 	<div class="card card-body"style="border-radius:25px; min-height:100%;">
             <a href="{% url 'new_post' %}" style="margin-left: 2%;"> <h1> <i class="fa fa-pencil fa-lg"></i> New Post...</h1> </a>
                 {% for post in posts %}
-                <div class="card" style="margin: 2%;">
-                    <div class="card-body">
-                        <p class="card-text">{{post.caption}}</p>
-                        <a href="#" class="card-link">{{post.created_at}}</a>
-                        <a href="{% url 'update_post' post.pk %}"><button class="btn btn-primary">update</button></a>
-                        <a href="{% url 'delete_post' post.pk %}"><button class="btn btn-primary">delete</button></a>
-                    </div>
-                </div>
+                        <div class="card" style="margin: 2%;">
+                                <div class="card-body">
+
+                                       <div class="row">
+                                            <div class="col-sm-10">
+                                                <p class="card-text lead">{{post.caption}}</p>
+                                                <a href="#" class="card-link badge" style="color: #95c2de">{{post.created_at | date:"M d, y - g:i"}}</a>
+                                            </div>
+
+                                            <div class="col-sm-2">
+                                                <a href="{% url 'update_post' post.pk %}"><button class="btn btn-primary mb-2">update</button></a>
+                                                <a href="{% url 'delete_post' post.pk %}"><button class="btn btn-danger" style="min-width: 75px">delete</button></a>
+                                            </div>
+                                        </div>
+
+                                </div>
+                            </div>
                 {% endfor %}
             {% include 'posts/pagination.html' %}
         </div>

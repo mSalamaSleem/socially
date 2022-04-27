@@ -107,7 +107,7 @@ hr {
 <body>
 
 <div id="id01" class="modal">
-  <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">×</span>
+  <a href="{% url 'profile' %}" class="close" title="Close Modal">×</a>
   <form class="modal-content" action="" method="POST"> {% csrf_token %}
     <div class="container">
       <h1>Delete Post</h1>

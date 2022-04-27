@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'users_authentication',
     'core',
+    'membership',
 ]
 
 MIDDLEWARE = [
@@ -125,6 +126,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'  # this line for forms crispy
+
+RAZOR_KEY_ID = 'rzp_test_NKOb34yOxxCPD1'
+RAZOR_KEY_SECRET = 'aaHNu2SbUFE4iglzHSIqt5jl'
 
 # change user model to mine
 AUTH_USER_MODEL = 'users_authentication.User'
