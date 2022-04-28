@@ -122,13 +122,27 @@ USE_L10N = True
 USE_TZ = True
 
 
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/1",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient"
+        },
+        "KEY_PREFIX": "example"
+    }
+}
+
+# Cache time to live is 15 minutes.
+CACHE_TTL = 60 * 15
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'  # this line for forms crispy
 
-RAZOR_KEY_ID = 'rzp_test_NKOb34yOxxCPD1'
-RAZOR_KEY_SECRET = 'aaHNu2SbUFE4iglzHSIqt5jl'
+RAZOR_KEY_ID = 'rzp_test_ktfDmEBdgtW2Ul'
+RAZOR_KEY_SECRET = '7Q2LulaKPIjUrmXg1ESEzl4w'
 
 # change user model to mine
 AUTH_USER_MODEL = 'users_authentication.User'

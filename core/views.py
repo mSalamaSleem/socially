@@ -1,6 +1,8 @@
+from django.core.cache.backends.base import DEFAULT_TIMEOUT
 from django.http import Http404
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse
+from django.views.decorators.cache import cache_page
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.list import ListView
 from django.contrib.auth.decorators import login_required
@@ -8,6 +10,10 @@ from django.utils.decorators import method_decorator
 from users_authentication.forms import *
 from .forms import PostUpdateForm
 from .models import *
+
+
+CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
+
 
 
 @method_decorator(login_required(login_url='login'), name='dispatch')
@@ -58,8 +64,17 @@ class PostCreationView(CreateView):
     success_url = reverse_lazy('profile')
 
     def form_valid(self, form):
-        form.instance.user = self.request.user
-        return super(PostCreationView, self).form_valid(form)
+        number_of_posts = self.request.user.get_num_posts()
+        if number_of_posts < 5:
+            form.instance.user = self.request.user
+            return super(PostCreationView, self).form_valid(form)
+        else:
+            if hasattr(self.request.user, 'customer'):
+                if self.request.user.customer.ismember:
+                    form.instance.user = self.request.user
+                    return super(PostCreationView, self).form_valid(form)
+            else:
+                return redirect('membership_home')
 
 
 @method_decorator(login_required(login_url='login'), name='dispatch')

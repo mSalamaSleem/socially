@@ -1,80 +1,9 @@
 from django.shortcuts import render
+from membership.models import Customer
 import razorpay
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
-from django.http import HttpResponseBadRequest
-#
-# # authorize razorpay client with API Keys.
-# razorpay_client = razorpay.Client(
-#     auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
-#
-#
-# def homepage(request):
-#     currency = 'INR'
-#     amount = 10000  # Rs. 100
-#
-#     # Create a Razorpay Order
-#     razorpay_order = razorpay_client.order.create(dict(amount=amount,
-#                                                        currency=currency,
-#                                                        payment_capture='0'))
-#
-#     # order id of newly created order.
-#     razorpay_order_id = razorpay_order['id']
-#     callback_url = 'paymenthandler/'
-#
-#     # we need to pass these details to frontend.
-#     context = {'razorpay_order_id': razorpay_order_id, 'razorpay_merchant_key': settings.RAZOR_KEY_ID,
-#                'razorpay_amount': amount, 'currency': currency, 'callback_url': callback_url}
-#
-#     return render(request, 'membership/plans.html', context=context)
-#
-#
-# # we need to csrf_exempt this url as
-# # POST request will be made by Razorpay
-# # and it won't have the csrf token.
-# @csrf_exempt
-# def paymenthandler(request):
-#     # only accept POST request.
-#     if request.method == "POST":
-#         try:
-#
-#             # get the required parameters from post request.
-#             payment_id = request.POST.get('razorpay_payment_id', '')
-#             razorpay_order_id = request.POST.get('razorpay_order_id', '')
-#             signature = request.POST.get('razorpay_signature', '')
-#             params_dict = {
-#                 'razorpay_order_id': razorpay_order_id,
-#                 'razorpay_payment_id': payment_id,
-#                 'razorpay_signature': signature
-#             }
-#
-#             # verify the payment signature.
-#             result = razorpay_client.utility.verify_payment_signature(
-#                 params_dict)
-#             if result is None:
-#                 amount = 10000  # Rs. 100
-#                 try:
-#
-#                     # capture the payemt
-#                     razorpay_client.payment.capture(payment_id, amount)
-#                     print(f"ssssssssssss {request.POST}")
-#                     # render success page on successful caputre of payment
-#                     return render(request, 'membership/paymentsuccess.html')
-#                 except:
-#                     print(f"fffffffffff {request.POST}")
-#                     # if there is an error while capturing payment.
-#                     return render(request, 'membership/paymentfail.html')
-#             else:
-#
-#                 # if signature verification fails.
-#                 return render(request, 'membership/paymentfail.html')
-#         except:
-#
-#             # if we don't find the required parameters in POST data
-#             return HttpResponseBadRequest()
-#     else:
-#         # if other than POST request is made.
-#         return HttpResponseBadRequest()
+from django.http import HttpResponseBadRequest, Http404
 
 
 def home(request):
@@ -82,18 +11,112 @@ def home(request):
         name = request.POST.get('name')
         amount = 50000
 
-        client = razorpay.Client(
-            auth=("rzp_test_vz1CP5QLynEHCM", "T4fAGC4nVSl7NqIL6FAEkF5a"))
+    # make integration call to razorpay api to create a payment object and get the payment_id
+        client = razorpay.Client(auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
+        payment = client.order.create(dict(amount=amount, currency='INR', receipt='order_rcptid_11', payment_capture='1'))
+        payment_id = payment['id']
 
-        try:
-            payment = client.order.create({'amount': amount, 'currency': 'INR',
-                                       'payment_capture': '1'})
-            print('ssssssssssssssss')
-        except:
-            print('fffffffffff')
-    return render(request, 'membership/plans.html')
+    # create a customer object in the database
+        customer = Customer(user=request.user, name=name, payment_id=payment_id, ismember=True)
+        customer.save()
+
+    # redirect to the payment page
+        return render(request, 'home/profile.html', {'payment_id': payment_id})
+    else:
+        return render(request, 'membership/plans.html')
 
 
-@csrf_exempt
-def success(request):
-    return render(request, "membership/paymentsuccess.html")
+# @csrf_exempt
+# def payment_status(request):
+#     if request.method == "POST":
+#         payment_id = request.POST.get('razorpay_payment_id')
+#         razorpay_order_id = request.POST.get('razorpay_order_id')
+#         razorpay_signature = request.POST.get('razorpay_signature')
+#         try:
+#             customer = Customer.objects.get(payment_id=payment_id)
+#         except Customer.DoesNotExist:
+#             return HttpResponseBadRequest()
+#         client = razorpay.Client(auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
+#         try:
+#             response = client.utility.verify_payment_signature(razorpay_order_id, razorpay_signature)
+#         except Exception:
+#             return HttpResponseBadRequest()
+#         if response:
+#             customer.ismember = True
+#             customer.save()
+#             return render(request, 'membership/paymentsuccess.html')
+#         return HttpResponseBadRequest()
+#     else:
+#         return HttpResponseBadRequest()
+
+
+# def payment_status_check(request):
+#     return render(request, 'payment_status_check.html')
+#
+#
+# def payment_status_check_success(request):
+#     return render(request, 'payment_status_check_success.html')
+#
+#
+# def payment_status_check_failure(request):
+#     return render(request, 'payment_status_check_failure.html')
+#
+#
+# def payment_failure(request):
+#     return render(request, 'payment_failure.html')
+#
+#
+# def payment_success(request):
+#     return render(request, 'payment_success.html')
+#
+#
+# def payment_cancelled(request):
+#     return render(request, 'payment_cancelled.html')
+#
+#
+# def payment_error(request):
+#     return render(request, 'payment_error.html')
+#
+#
+# def payment_pending(request):
+#     return render(request, 'payment_pending.html')
+#
+#
+# def payment_expired(request):
+#     return render(request, 'payment_expired.html')
+#
+#
+# def payment_captured(request):
+#     return render(request, 'payment_captured.html')
+#
+#
+# def payment_authorized(request):
+#     return render(request, 'payment_authorized.html')
+#
+#
+# def payment_failed(request):
+#     return render(request, 'payment_failed.html')
+#
+#
+# def payment_refunded(request):
+#     return render(request, 'payment_refunded.html')
+#
+#
+# def payment_settled(request):
+#     return render(request, 'payment_settled.html')
+#
+#
+# def payment_disbursed(request):
+#     return render(request, 'payment_disbursed.html')
+#
+#
+# def payment_reversed(request):
+#     return render(request, 'payment_reversed.html')
+#
+#
+# def payment_initiated(request):
+#     return render(request, 'payment_initiated.html')
+#
+#
+# def payment_authorized(request):
+#     return render(request, 'payment_authorized.html')

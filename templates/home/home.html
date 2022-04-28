@@ -21,23 +21,42 @@ Home
 
         <div class="card card-body"style="border-radius:25px;">
 
-            {% for post in posts %}
+            {% if posts %}
+                {% for post in posts %}
+                    <div class="card" style="margin: 2%;">
 
-            <div class="card" style="margin: 2%;">
-
-                <div class="card-body row">
-                    <div class="col-md-2">
-                        <img src="{{post.user.profile_pic.url}}" style="max-width:100px; max-height:100px;">
-                    </div>
-                    <div class="col-md-10">
-                        <a href="{% url 'friend-profile' post.user.username %}" class="card-link"><h4>@{{post.user.username}}</h4></a>
-                        <p class="card-text">{{post.caption}}</p>
-                        <a href="#" class="card-link">{{post.created_at}}</a>
+                    <div class="card-body row">
+                        <div class="col-md-2">
+                            <img src="{{post.user.profile_pic.url}}" style="max-width:100px; max-height:100px;">
+                        </div>
+                        <div class="col-md-10">
+                            <a href="{% url 'friend-profile' post.user.username %}" class="card-link"><h4>@{{post.user.username}}</h4></a>
+                            <p class="card-text">{{post.caption}}</p>
+                            <a href="#" class="card-link">{{post.created_at}}</a>
+                        </div>
                     </div>
                 </div>
-            </div>
+                {% endfor %}
 
-            {% endfor %}
+            {% else %}
+                <!-- Jumbotron -->
+                <div class="p-5 text-center bg-image rounded-3" style="
+                    background-image: url('https://mdbcdn.b-cdn.net/img/new/slides/041.webp');
+                    height: 400px;
+                  ">
+                  <div class="mask" style="background-color: rgba(0, 0, 0, 0.6);">
+                    <div class="d-flex justify-content-center align-items-center h-100">
+                      <div class="text-white">
+                        <h1 class="mb-3">OOPS you have no posts</h1>
+                        <h4 class="mb-3">follow some people to show recent posts</h4>
+                        <a class="btn btn-outline-light btn-lg" href="#!" role="button">Call to action</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- Jumbotron -->
+            {% endif %}
+
             {%  include 'posts/pagination.html' %}
         </div>
 

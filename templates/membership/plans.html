@@ -14,19 +14,17 @@ Home
 {% endblock navbar %}
 
 {% block content %}
-
-
-    <form class="text-center border border-light p-5" action="{% url 'success' %}" method="POST">
+     <form class="text-center border border-light p-5" action="" method="POST">
         {% csrf_token %}
 
-        <p class="h3 mb-3"><i class="fas fa-coffee"></i> BUY ME A COFFEE!!</p>
-        <p class="mb-3">Help us create more videos by donating 500 INR</p>
+        <p class="h3 mb-3"><i class="fas fa-coffee"></i> Be a Member </p>
+        <p class="mb-3">get access to all featers and unlimited posts (500$)</p>
 
         <input type="name" name="name" id="name" required class="form-control mb-4" placeholder="Name">
 
         <!-- RAZORPAY INTEGRATION HERE -->
         <script src="https://checkout.razorpay.com/v1/checkout.js"
-        data-key="rzp_test_vz1CP5QLynEHCM"
+        data-key="rzp_test_ktfDmEBdgtW2Ul"
         data-amount="50000"
         data-currency="INR"
         data-order_id="{{payment.id}}"
@@ -39,6 +37,4 @@ Home
         data-theme.color="#F37254"></script>
 
     </form>
-
-
 {% endblock %}

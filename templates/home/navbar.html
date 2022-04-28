@@ -11,6 +11,15 @@
         <ul class="navbar-nav  ml-auto">
 
 
+            {% if request.user.customer.ismember %}
+                 <li class="nav-item">
+                    <a class="nav-link mr-5"> <i class="fa fa-unlock-alt"></i> Unlimited Access</a>
+                </li>
+            {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'membership_home' %}"> <i class="fa fa-unlock-alt"></i> Membership</a>
+                </li>
+            {% endif  %}
             
 
             <li class="nav-item">
