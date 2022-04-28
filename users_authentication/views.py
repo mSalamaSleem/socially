@@ -1,19 +1,28 @@
+from django.conf import settings
+from django.core.cache import cache
+from django.core.cache.backends.base import DEFAULT_TIMEOUT
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
+from django.views.decorators.vary import vary_on_cookie
 from django.views.generic.edit import CreateView, UpdateView
 from django.urls import reverse_lazy, reverse
+
+
 from .forms import *
 
 from django.core.mail import send_mail, BadHeaderError
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.contrib.auth.forms import PasswordResetForm
 from django.template.loader import render_to_string
 from django.db.models.query_utils import Q
 from django.utils.http import urlsafe_base64_encode
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.encoding import force_bytes
+
+
+CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 
 
 class SignUpView(CreateView):
@@ -58,6 +67,11 @@ def login_page(request):
 
 def logout_page(request):
     logout(request)
+    try:
+        pass
+        # cache.clear()
+    except AttributeError:
+        raise Http404('You have no cache configured!\n')
     return redirect('login')
 
 
