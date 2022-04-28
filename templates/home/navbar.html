@@ -1,3 +1,9 @@
+{% comment %}
+{% load cache %}
+{% cache 30 navbar %}
+{% endcache %}
+{% endcomment %}
+
 <nav class="navbar navbar-expand-lg navbar-dark " style="background-color: #81b7d6;">
     <button class="navbar-toggler" type="button" style="color:white;" data-toggle="collapse" data-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon" ></span>
@@ -43,3 +49,5 @@
 
     </div>
 </nav>
+
+

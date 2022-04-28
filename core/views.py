@@ -1,4 +1,6 @@
+from django.core.cache import cache
 from django.core.cache.backends.base import DEFAULT_TIMEOUT
+from django.dispatch import receiver
 from django.http import Http404
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse
@@ -11,9 +13,7 @@ from django.utils.decorators import method_decorator
 from users_authentication.forms import *
 from .forms import PostUpdateForm
 from .models import *
-
-
-CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
+from django.db.models.signals import post_save, post_delete, pre_save, pre_delete, m2m_changed
 
 
 @method_decorator(login_required(login_url='login'), name='dispatch')
@@ -136,3 +136,27 @@ def unfollow_user(request, pk):
         # print(f"{new_friend.follower} following {new_friend.followed}")
         print('error delete')
     return redirect('friend-profile', username=followed.username)
+
+
+@receiver(post_save, sender=Post)
+def clear_cache(sender, instance, created, **kwargs):
+    if instance.caption is not None:
+        cache.clear()
+
+
+@receiver(post_delete, sender=Post)
+def clear_cache2(sender, instance, **kwargs):
+    if instance.caption is not None:
+        cache.clear()
+
+
+# clear cache when friend is deleted or updated or created
+@receiver(post_delete, sender=Friend)
+def clear_cache3(sender, instance, **kwargs):
+    cache.clear()
+
+
+@receiver(post_save, sender=Friend)
+def clear_cache4(sender, instance, **kwargs):
+    cache.clear()
+

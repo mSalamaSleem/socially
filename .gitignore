@@ -139,3 +139,4 @@ GitHub.sublime-settings
 #mac
 .DS_Store
 .idea/
+dump.rdb

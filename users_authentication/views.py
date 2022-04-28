@@ -22,9 +22,6 @@ from django.contrib.auth.tokens import default_token_generator
 from django.utils.encoding import force_bytes
 
 
-CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
-
-
 class SignUpView(CreateView):
     model = User
     form_class = SignUpForm
@@ -68,8 +65,7 @@ def login_page(request):
 def logout_page(request):
     logout(request)
     try:
-        pass
-        # cache.clear()
+        cache.clear()
     except AttributeError:
         raise Http404('You have no cache configured!\n')
     return redirect('login')
