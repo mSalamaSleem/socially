@@ -2,5 +2,7 @@ from django.urls import path
 from .views import *
 
 urlpatterns = [
-    path('', PostsList.as_view(), name='posts_list_api'),
+    path('', FriendsPostsList.as_view(), name='friends_posts_list_api'),
+    path('profile/posts/', UserPostsList.as_view(), name='user_posts_list_api'),
+    path('profile/posts/<int:pk>', UserPostDetails.as_view(), name='user_posts_detail_api'),
 ]
