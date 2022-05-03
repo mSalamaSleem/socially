@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
-from core.models import Post
+from core.models import Post, Friend
 
 
 class AllPostsSerializer(serializers.ModelSerializer):
@@ -12,3 +12,11 @@ class AllPostsSerializer(serializers.ModelSerializer):
         model = Post
         fields = ('id', 'caption', 'user', 'created_at')
         read_only_fields = ('user', 'created_at')
+
+
+class FriendsSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Friend
+        fields = ('id', 'follower', 'followed')
+        read_only_fields = ('follower', 'followed')
