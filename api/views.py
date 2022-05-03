@@ -1,7 +1,20 @@
 from rest_framework import generics, permissions
 
-from api.serializers import AllPostsSerializer, FriendsSerializer
+from api.serializers import AllPostsSerializer, FriendsSerializer, UserSerializer
 from core.models import Post, Friend
+from users_authentication.models import User
+
+
+class SearchResultsList(generics.ListAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = UserSerializer
+
+    def get_queryset(self):
+        """
+        This view should return a list of all user
+        that contain keyword-search.
+        """
+        return User.objects.filter(username__contains=self.kwargs['username']).order_by('username')
 
 
 class FriendsPostsList(generics.ListAPIView):

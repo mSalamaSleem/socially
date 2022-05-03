@@ -20,3 +20,10 @@ class FriendsSerializer(serializers.ModelSerializer):
         model = Friend
         fields = ('id', 'follower', 'followed')
         read_only_fields = ('follower', 'followed')
+
+
+class UserSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = get_user_model()
+        fields = ('id', 'username', 'profile_pic', 'bio')
