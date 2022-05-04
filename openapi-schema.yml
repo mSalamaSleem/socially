@@ -1,0 +1,81 @@
+openapi: 3.0.2
+info:
+  title: ''
+  version: ''
+paths:
+  /api/:
+    get:
+      operationId: listAllPosts
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AllPosts'
+          description: ''
+      tags:
+      - api
+  /api/profile/posts/:
+    get:
+      operationId: listAllPosts
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AllPosts'
+          description: ''
+      tags:
+      - api
+    post:
+      operationId: createAllPosts
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AllPosts'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AllPosts'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AllPosts'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AllPosts'
+          description: ''
+      tags:
+      - api
+components:
+  schemas:
+    AllPosts:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        caption:
+          type: string
+          maxLength: 100
+        user:
+          type: string
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - caption

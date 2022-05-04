@@ -40,12 +40,21 @@ INSTALLED_APPS = [
     # Third-party apps
     'crispy_forms',
     'rest_framework',
+    'rest_framework.authtoken',
+    'drf_yasg',
 
     'users_authentication',
     'core',
     'membership',
     'api',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ]
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
